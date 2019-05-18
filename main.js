@@ -235,6 +235,7 @@ const main = () => {
     if (!settings.loadBitPattern(fullBitPattern)) {
         setNumberFromString('-12.75');
     }
+    reloadNumber();
 };
 
 
