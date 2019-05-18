@@ -46,15 +46,11 @@ const settings = {
         localStorage.setItem(kLocalStorageKeyFormat, name);
     },
     
-    setBitPattern: bitPattern => {
-        const bits = Array(64);
-        for (let i = 0; i < bitPattern.length; i++) {
-            bits[i] = bitPattern[i];
-        }
-        localStorage.setItem(kLocalStorageKeyBitPattern, JSON.stringify(bits));
+    setBitPattern: () => {
+        localStorage.setItem(kLocalStorageKeyBitPattern, JSON.stringify(Array.from(fullBitPattern)));
     },
     
-    loadBitPattern: buffer => {
+    loadBitPattern: () => {
         const bits = JSON.parse(localStorage.getItem(kLocalStorageKeyBitPattern));
         if (bits === null) return false;
         fullBitPattern.set(bits, 0);
@@ -63,13 +59,13 @@ const settings = {
 };
 
 
-
+// TODO: there must be a better way to access a double's internal representation?
 const _double2IEEE = value => {
     const buffer = new ArrayBuffer(8);
-    const float = new Float64Array(buffer);
-    const uint = new Uint8Array(buffer);
-    float[0] = value;
-    return uint;
+    const flt64buf = new Float64Array(buffer);
+    const uint8buf = new Uint8Array(buffer);
+    flt64buf[0] = value;
+    return uint8buf;
 }
 
 
@@ -121,10 +117,9 @@ const reloadNumber = event => {
     const numBits = prop.byteCount * 8;
 
     if (event instanceof MouseEvent && event.target.classList.contains('bit')) {
-        // Did toggle a bit
         const value = parseInt(event.target.textContent);
         event.target.textContent = `${1 - value}`;
-        fullBitPattern[numBits - 1 - event.target.getAttribute('lk_bit_index')] = 1 - value;
+        fullBitPattern[numBits - 1 - parseInt(event.target.getAttribute('lk_bit_index'))] = 1 - value;
         settings.setBitPattern(fullBitPattern);
     }
 
@@ -133,7 +128,7 @@ const reloadNumber = event => {
     const exponentBitPattern = new Uint8Array(rawBitPattern, 1, prop.exponentWidth);
     const fractionBitPattern = new Uint8Array(rawBitPattern, fractionBitPatternOffset, numBits - 1 - prop.exponentWidth);
 
-    const exponentZeroOffset = ((1 << (prop.exponentWidth - 1)) - 1);
+    const exponentZeroOffset = (1 << (prop.exponentWidth - 1)) - 1;
     const exponentSum = sum(exponentBitPattern);
     const fractionSum = sum(fractionBitPattern);
     const implicitLeadingFractionBit = exponentBitPattern.includes(1) ? 1 : 0;
@@ -146,7 +141,7 @@ const reloadNumber = event => {
         return acc + Math.pow(2, -(i + 1)) * fractionBitPattern[i];
     }, implicitLeadingFractionBit);
     
-    let number = sgn * Math.pow(2, e - exponentZeroOffset) * f;
+    let number = undefined;
 
     if (exponentSum === 0) {
         if (fractionSum === 0) {
@@ -160,6 +155,9 @@ const reloadNumber = event => {
         }
     }
 
+    if (number === undefined) {
+        number = sgn * Math.pow(2, e - exponentZeroOffset) * f;
+    }
 
     document.getElementById('number-preview').value = `${number}`;
     const formulaDiv = document.getElementById('number-formula');
@@ -209,10 +207,13 @@ const setupBitsTable = () => {
         byteElem.appendChild(bitElem);
         if (i == 0) {
             bitElem.classList.add('bit-style-signbit');
-        } else if (i > 0 && i < NumberProperties[currentFormat].exponentWidth + 1) {
+            bitElem.title += ' (sign bit)';
+        } else if (i < NumberProperties[currentFormat].exponentWidth + 1) {
             bitElem.classList.add('bit-style-exponent');
+            bitElem.title += ' (exponent)';
         } else {
             bitElem.classList.add('bit-style-significand');
+            bitElem.title += ' (fraction)';
         }
     }
 }
@@ -232,7 +233,7 @@ const main = () => {
     document.getElementsByClassName('format-option')[_formatId[currentFormat]].classList.add('format-selected');
     setSelectedFormat(currentFormat);
 
-    if (!settings.loadBitPattern(fullBitPattern)) {
+    if (!settings.loadBitPattern()) {
         setNumberFromString('-12.75');
     } else {
         setupBitsTable();
