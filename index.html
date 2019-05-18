@@ -41,6 +41,10 @@
       margin: auto 5px;
     }
 
+    .format-option {
+      cursor: pointer;
+    }
+
     .format-selected, .format-selected:hover {
       color: black;
     }
@@ -118,11 +122,10 @@
   
     <div class="row" style="margin-top: 3%">
       <div class="twelve columns centered">
-          <p style="margin-bottom: 10px">Select Format:</p>
           <div class="format-chooser">
-              <a href="#" class="monospaced format-option" fmt_id="0">binary16</a>
-              <a href="#" class="monospaced format-option" fmt_id="1">binary32</a>
-              <a href="#" class="monospaced format-option" fmt_id="2">binary64</a>
+              <a class="monospaced format-option" fmt_id="0">binary16</a>
+              <a class="monospaced format-option" fmt_id="1">binary32</a>
+              <a class="monospaced format-option" fmt_id="2">binary64</a>
           </div>
       </div>
     </div>
