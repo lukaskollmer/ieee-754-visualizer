@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <title>ieee-754-visualizer</title>
+  
+  <meta name="description" content="ieee-754-visualizer">
+  <meta name="author" content="Lukas Kollmer">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://files.lukaskollmer.me/skeleton/normalize.css">
+  <link rel="stylesheet" href="https://files.lukaskollmer.me/skeleton/skeleton.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .monospaced, #number-preview {
+      font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    }
+
+    h1 {
+      font-size: xx-large;
+      font-weight: 350;
+    }
+
+    h3 {
+      font-size: x-large;
+    }
+
+    .centered {
+      text-align: center;
+      align-content: center;
+    }
+
+    .format-chooser > a {
+      margin: auto 5px;
+    }
+
+    .format-selected, .format-selected:hover {
+      color: black;
+    }
+
+    #bits-table {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    #bits-table > .byte {
+      margin: auto 8px;
+    }
+
+    .byte {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 20px;
+    }
+
+    .bit {
+      margin: auto 8px;
+      font-size: 22px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .byte > .bit {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    .bit-style-signbit {
+      color: red;
+    }
+    .bit-style-exponent {
+      color: green;
+    }
+    .bit-style-significand {
+      color: black;
+    }
+
+    #number-preview {
+      font-size: 30px;
+      margin: auto;
+      height: 50px;
+      width: 100%;
+      text-align: center;
+      display: block;
+      border-style: none;
+      background-color:  white;
+      transition: background-color 0.5s ease;
+    }
+
+    #number-preview:hover {
+      background-color: #F1F3F4;
+    }
+
+    #number-formula {
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container" id="main">
+    <div class="row">
+      <div class="twelve columns" style="margin-top: 5%">
+        <h1>IEEE 754 visualizer</h1>
+      </div>
+    </div>
+  
+    <div class="row" style="margin-top: 5%">
+      <div class="twelve columns centered">
+          <p style="margin-bottom: 10px">Select Format:</p>
+          <div class="format-chooser">
+              <a href="#" class="monospaced format-option" fmt_id="0">binary16</a>
+              <a href="#" class="monospaced format-option" fmt_id="1">binary32</a>
+              <a href="#" class="monospaced format-option" fmt_id="2">binary64</a>
+          </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 5%">
+      <div class="twelve columns">
+        <div id="bits-table"></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 2%">
+      <div class="twelve columns">
+        <input type="text" id="number-preview" class="">
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 2%">
+      <div class="twelve columns centered">
+        <div id="number-formula" class="monospaced centered"></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 5%">
+      <div class="twelve columns">
+        <h3>Further reading:</h3>
+        <ul>
+          <li><a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE 754</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">Single-precision floating-point format</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">Double-precision floating-point format</a></li>
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 4%; margin-bottom: 2%">
+      <hr>
+      <div class="twelve columns centered">
+        <p>Made by Lukas Kollmer. View on <a href="https://github.com/lukaskollmer/ieee-754-visualizer">GitHub</a></p>
+      </div>
+    </div>
+  
+  </div>
+  <script src="./main.js"></script>
+</body>
+</html>
