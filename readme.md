@@ -3,7 +3,7 @@
 
 <br>
 
-View in action: https://files.lukaskollmer.me/ieee-754-visualizer/index.html
+View in action: https://lukaskollmer.me/ieee-754-visualizer
 
 
 ## License
